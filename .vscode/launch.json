@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Launch npm install (tailwindcss, postcss, autoprefixer)",
+            "cwd": "${workspaceFolder}/client",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "install",
+                "-D",
+                "tailwindcss@3",
+                "postcss",
+                "autoprefixer"
+            ],
+            "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}
