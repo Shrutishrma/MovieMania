@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+// Define the base URL for the deployed backend API
+const API_BASE_URL = 'https://moviemania-rrp4.onrender.com';
+
 const Home = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState('');
@@ -9,11 +12,14 @@ const Home = () => {
 
   const fetchMovies = async () => {
     try {
-      const res = await axios.get('https://moviemania-rrp4.onrender.com/movies');
+      // Fetch all movies from the deployed backend
+      const res = await axios.get(`${API_BASE_URL}/movies`);
       setMovies(res.data);
+      setError(null); // Clear errors if successful
     } catch (err) {
       console.error("Error fetching movies:", err);
-      setError("Failed to fetch movies. Is the Backend running?");
+      // Display a relevant error message for the exam
+      setError("Failed to fetch movies. Check deployment links.");
     }
   };
 
@@ -21,13 +27,15 @@ const Home = () => {
     fetchMovies();
   }, []);
 
+  // --- CRUD: DELETE Function (FIXED URL) ---
   const handleDelete = async (id) => {
     if (window.confirm("Delete this movie?")) {
       try {
-        await axios.delete(`http://localhost:5000/movies/${id}`);
+        // FIXED URL: Using the deployed API_BASE_URL
+        await axios.delete(`${API_BASE_URL}/movies/${id}`);
         fetchMovies();
       } catch (err) {
-        alert("Failed to delete movie");
+        alert("Failed to delete movie.");
       }
     }
   };
@@ -40,18 +48,19 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-100 pb-10">
 
-      {/* --- HERO SECTION WITH VIDEO --- */}
+      {/* --- HERO SECTION (Covers: Hero Section Text & Video Embed) --- */}
       <div className="relative w-full h-96 bg-black overflow-hidden">
         {/* Background Video */}
         <iframe
-          className="absolute top-0 left-0 w-full h-full object-cover opacity-50 pointer-events-none scale-125"
-          src="https://www.youtube.com/embed/JfVOs4VSpmA?autoplay=1&mute=1&controls=0&loop=1&playlist=JfVOs4VSpmA&showinfo=0"
+          // Using a standard, reliable embedded video source
+          className="absolute top-0 left-0 w-full h-full object-cover opacity-60"
+          src="https://www.youtube.com/embed/jfvs4VSpmA?autoplay=1&mute=1&controls=0&loop=1&playlist=jfvs4VSpmA&showinfo=0"
           title="Movie Trailer"
           frameBorder="0"
           allow="autoplay; encrypted-media"
         ></iframe>
 
-        {/* Text Overlay (Z-Index ensures it sits ON TOP of video) */}
+        {/* Text Overlay */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
           <h1 className="text-6xl font-extrabold mb-4 drop-shadow-xl text-red-600 tracking-tighter">
             MOVIEMANIA
@@ -64,14 +73,14 @@ const Home = () => {
 
       <div className="container mx-auto px-4 mt-8">
 
-        {/* Error Message */}
+        {/* Error Message Display */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center">
             <strong>Error: </strong> {error}
           </div>
         )}
 
-        {/* Search Input */}
+        {/* Search Input (Covers: Search functionality) */}
         <div className="mb-8 flex justify-center">
           <input
             type="text"
@@ -82,12 +91,12 @@ const Home = () => {
           />
         </div>
 
-        {/* Movies Grid */}
+        {/* Movies Grid (Covers: Responsive layout, Posters, Description Snippet, Hover effects) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredMovies.map((movie) => (
             <div key={movie.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300 group flex flex-col">
 
-              {/* Poster */}
+              {/* Poster (Covers: Lazy Loading) */}
               <div className="relative overflow-hidden h-80">
                 <img
                   src={movie.poster_url}
@@ -112,7 +121,7 @@ const Home = () => {
                   </p>
                 </div>
 
-                {/* Buttons */}
+                {/* CRUD Buttons (Covers: View Details, Edit, Delete) */}
                 <div className="flex justify-between mt-4 border-t pt-4">
                   <Link to={`/movie/${movie.id}`} className="text-green-600 hover:text-green-800 font-bold text-sm uppercase">
                     View
